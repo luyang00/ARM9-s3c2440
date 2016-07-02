@@ -35,9 +35,19 @@
 /*
  * Hardware drivers
  */
+#if 0
 #define CONFIG_CS8900		/* we have a CS8900 on-board */
 #define CONFIG_CS8900_BASE	0x19000300
 #define CONFIG_CS8900_BUS16	/* the Linux driver does accesses as shorts */
+#else 
+#define CONFIG_DRIVER_DM9000
+#define CONFIG_DM9000_USE_16BIT
+#define CONFIG_DM9000_BASE	0x20000000
+#define DM9000_IO		0x20000000
+#define DM9000_DATA		0x20000004
+#define CONFIG_ETHADDR	   	08:00:3e:26:0a:5b
+
+#endif
 
 /*
  * select serial console configuration
@@ -84,9 +94,11 @@
 #define CONFIG_RESET_TO_RETRY
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
-#define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_IPADDR		10.0.0.110
-#define CONFIG_SERVERIP		10.0.0.1
+
+#define CONFIG_IPADDR	   	192.168.1.105
+#define CONFIG_NETMASK      	255.255.255.0
+#define SERVERIP		192.168.1.103
+
 
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	115200	/* speed to run kgdb serial port */
@@ -131,14 +143,14 @@
  */
 
 #define CONFIG_SYS_FLASH_CFI
-#define CONFIG_FLASH_CFI_DRIVER         1
+#define CONFIG_FLASH_CFI_DRIVER         
 #define CONFIG_FLASH_CFI_LEGACY
 #define CONFIG_SYS_FLASH_LEGACY_512Kx16
 #define CONFIG_FLASH_SHOW_PROGRESS	45
 
 #define CONFIG_SYS_MAX_FLASH_BANKS	1
 #define CONFIG_SYS_FLASH_BANKS_LIST     { CONFIG_SYS_FLASH_BASE }
-#define CONFIG_SYS_MAX_FLASH_SECT	(19)
+#define CONFIG_SYS_MAX_FLASH_SECT	(35)
 
 #define CONFIG_ENV_ADDR			(CONFIG_SYS_FLASH_BASE + 0x070000)
 #define CONFIG_ENV_IS_IN_FLASH
@@ -159,7 +171,7 @@
  * NAND configuration
  */
 #ifdef CONFIG_CMD_NAND
-#define CONFIG_NAND_S3C2410
+#define CONFIG_NAND_S3C2440
 #define CONFIG_SYS_S3C2410_NAND_HWECC
 #define CONFIG_SYS_MAX_NAND_DEVICE	1
 #define CONFIG_SYS_NAND_BASE		0x4E000000

@@ -122,6 +122,8 @@ int board_eth_init(bd_t *bis)
 	int rc = 0;
 #ifdef CONFIG_CS8900
 	rc = cs8900_initialize(0, CONFIG_CS8900_BASE);
+#else 
+	rc = dm9000_initialize(bis);
 #endif
 	return rc;
 }
@@ -136,5 +138,5 @@ ulong board_flash_get_legacy(ulong base, int banknum, flash_info_t *info)
 	info->portwidth = FLASH_CFI_16BIT;
 	info->chipwidth = FLASH_CFI_BY16;
 	info->interface = FLASH_CFI_X16;
-	return 1;
+	return 0;
 }
