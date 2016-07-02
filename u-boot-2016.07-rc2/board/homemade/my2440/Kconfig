@@ -1,0 +1,18 @@
+if TARGET_MY2440
+
+config SYS_BOARD
+	default "my2440"
+
+config SYS_VENDOR
+	default "homemade"
+
+config SYS_SOC
+	default "s3c24x0"
+
+config SYS_CONFIG_NAME
+	default "my2440"
+
+endif
+
+
+
