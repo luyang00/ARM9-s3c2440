@@ -95,7 +95,7 @@
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
 /*bootargs*/
-#define CONFIG_BOOTARGS "noinitrd root=/dev/mtdblock2 init=/linuxrc console=ttySAC0"
+#define CONFIG_BOOTARGS "noinitrd root=/dev/mtdblock3 init=/linuxrc console=ttySAC0,115200"
 #define CONFIG_BOOTCOMMAND "nboot 0x32000000 0 0; bootm 0x32000000"
 
 #define CONFIG_IPADDR	   	192.168.1.105
