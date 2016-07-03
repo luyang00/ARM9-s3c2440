@@ -29,7 +29,7 @@
 #define CONFIG_SYS_CLK_FREQ	12000000
 
 #define CONFIG_CMDLINE_TAG	/* enable passing of ATAGs */
-#define CONFIG_SETUP_MEMORY_TAGS
+#define CONFIG_SETUP_MEMORY_TAGS 
 #define CONFIG_INITRD_TAG
 
 /*
@@ -94,6 +94,9 @@
 #define CONFIG_RESET_TO_RETRY
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
+/*bootargs*/
+#define CONFIG_BOOTARGS "noinitrd root=/dev/mtdblock2 init=/linuxrc console=ttySAC0"
+#define CONFIG_BOOTCOMMAND "nboot 0x32000000 0 0; bootm 0x32000000"
 
 #define CONFIG_IPADDR	   	192.168.1.105
 #define CONFIG_NETMASK      	255.255.255.0
@@ -152,7 +155,7 @@
 #define CONFIG_SYS_FLASH_BANKS_LIST     { CONFIG_SYS_FLASH_BASE }
 #define CONFIG_SYS_MAX_FLASH_SECT	(35)
 
-#define CONFIG_ENV_ADDR			(CONFIG_SYS_FLASH_BASE + 0x070000)
+#define CONFIG_ENV_ADDR			(CONFIG_SYS_FLASH_BASE + 0x100000)
 #define CONFIG_ENV_IS_IN_FLASH
 #define CONFIG_ENV_SIZE			0x10000
 /* allow to overwrite serial and ethaddr */
