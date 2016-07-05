@@ -580,9 +580,24 @@ int nand_write_skip_bad(struct mtd_info *mtd, loff_t offset, size_t *length,
 
 	if (actual)
 		*actual = 0;
+	#ifdef CONFIG_CMD_NAND_YAFFS
+	if (flags & WITH_YAFFS_OOB) {
+		if (flags & ~WITH_YAFFS_OOB)
+			return -EINVAL;
 
-	blocksize = mtd->erasesize;
-
+		int pages;
+		pages = mtd->erasesize / mtd->writesize;
+		blocksize = (pages * mtd->oobsize) + mtd->erasesize;
+		if (*length % (mtd->writesize + mtd->oobsize)) {
+			printf("Attempt to write incomplete page"
+				" in yaffs mode\n");
+			return -EINVAL;
+		}
+	} else
+	#endif
+	
+		blocksize = mtd->erasesize;
+	
 	/*
 	 * nand_write() handles unaligned, partial page writes.
 	 *
@@ -649,7 +664,36 @@ int nand_write_skip_bad(struct mtd_info *mtd, loff_t offset, size_t *length,
 			write_size = left_to_write;
 		else
 			write_size = blocksize - block_offset;
+#ifdef CONFIG_CMD_NAND_YAFFS
+		if (flags & WITH_YAFFS_OOB) {
+			int page, pages;
+			size_t pagesize = mtd->writesize;
+			size_t pagesize_oob = pagesize + mtd->oobsize;
+			struct mtd_oob_ops ops;
 
+			ops.len = pagesize;
+			ops.ooblen = mtd->oobsize;
+			ops.mode =  MTD_OPS_RAW;
+			ops.ooboffs = 0;
+
+			pages = write_size / pagesize_oob;
+			for (page = 0; page < pages; page++) {
+				WATCHDOG_RESET();
+
+				ops.datbuf = p_buffer;
+				ops.oobbuf = ops.datbuf + pagesize;
+
+				rval = mtd_write_oob(mtd, offset, &ops);
+				if (rval != 0)
+					break;
+
+				offset += pagesize;
+				p_buffer += pagesize_oob;
+			}
+		}
+		else
+#endif
+		{
 		truncated_write_size = write_size;
 #ifdef CONFIG_CMD_NAND_TRIMFFS
 		if (flags & WITH_DROP_FFS)
@@ -666,7 +710,7 @@ int nand_write_skip_bad(struct mtd_info *mtd, loff_t offset, size_t *length,
 
 		offset += write_size;
 		p_buffer += write_size;
-
+		}
 		if (rval != 0) {
 			printf("NAND write to offset %llx failed %d\n",
 				offset, rval);

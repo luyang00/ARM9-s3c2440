@@ -32,6 +32,8 @@
 #define CONFIG_SETUP_MEMORY_TAGS 
 #define CONFIG_INITRD_TAG
 
+
+
 /*
  * Hardware drivers
  */
@@ -191,11 +193,26 @@
 #define CONFIG_YAFFS2
 #define CONFIG_RBTREE
 
+/*
+ *yaffs support
+ */
+#define	CONFIG_CMD_NAND_YAFFS
+#define CONFIG_MTD_NAND_YAFFS2   1 //定义一个管理对Yaffs2支持的宏
+#define MTDIDS_DEFAULT "nand0=nandflash0"
+#define MTDPARTS_DEFAULT "mtdparts=nandflash0:512k(bootloader)," \
+                     "128k(params)," \
+                     "4m(kernel)," \
+                     "-(rootfs)"
+
 /* additions for new relocation code, must be added to all boards */
 #define CONFIG_SYS_SDRAM_BASE	PHYS_SDRAM_1
 #define CONFIG_SYS_INIT_SP_ADDR	(CONFIG_SYS_SDRAM_BASE + 0x1000 - \
 				GENERATED_GBL_DATA_SIZE)
 
 #define CONFIG_BOARD_EARLY_INIT_F
+
+
+
+
 
 #endif /* __CONFIG_H */
