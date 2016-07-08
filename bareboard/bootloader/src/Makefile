@@ -5,11 +5,10 @@ AR      = arm-linux-gnueabihf-ar
 OBJCOPY = arm-linux-gnueabihf-objcopy
 OBJDUMP = arm-linux-gnueabihf-objdump
 
-INCLUDEDIR 	:= $(shell pwd)/include
+
 CFLAGS 		:= -Wall -O2
 CPPFLAGS   	:= -nostdinc -fno-builtin 
 
-export 	CC LD AR OBJCOPY OBJDUMP INCLUDEDIR CFLAGS CPPFLAGS
 
 objs := start.o init.o boot.o
 
