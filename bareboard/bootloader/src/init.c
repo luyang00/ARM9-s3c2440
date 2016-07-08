@@ -20,6 +20,9 @@
 #define URXH0               (*(volatile unsigned char *)0x50000024)
 #define UBRDIV0             (*(volatile unsigned long *)0x50000028)
 
+/*LED*/
+#define GPFCON      (*(volatile unsigned long *)0x56000050)
+#define GPFDAT      (*(volatile unsigned long *)0x56000054)
 
 
 #define TXD0READY   (1<<2)
@@ -66,6 +69,13 @@ void puts(char *str)
 		i++;
 	}
 }
+
+void led_on()
+{
+    GPFCON = 0x00000100;    // 设置GPF4为输出口, 位[8:7]=0b01
+    GPFDAT = 0x00000000;    // GPF4输出0，LED1点亮
+}
+
 
 int isBootFromNorFlash(void)
 {

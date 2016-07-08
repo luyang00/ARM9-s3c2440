@@ -56,7 +56,7 @@ void setup_end_tag()
 int main(void)
 {
 	void (*theKernel)(int zero,int arch,unsigned int params);
-		
+	led_on();		
 	/*0.bootloader should init serial port, linux kernel don't do init job*/
 	uart0_init();
 	/*1.read kernel from nand flash*/
