@@ -29,7 +29,8 @@
 #define UART_CLK        PCLK        //  UART0的时钟源设为PCLK
 #define UART_BAUD_RATE  115200      // 波特率
 #define UART_BRD        ((UART_CLK  / (UART_BAUD_RATE * 16)) - 1)
-
+void nand_init(void);
+void nand_read(unsigned int addr,unsigned char *buf,unsigned int len);
 /*
  * 初始化UART0
  * 115200,8N1,无流控
@@ -61,7 +62,7 @@ void puts(char *str)
 	int i=0;
 	while(str[i])
 	{
-		putc(str)
+		putc((unsigned char)str[i]);
 		i++;
 	}
 }
@@ -86,7 +87,7 @@ int isBootFromNorFlash(void)
 	
 		
 }
-int copy_code_to_sdram(unsigned char *src,unsigned char *dest,unsigned int length)
+void copy_code_to_sdram(unsigned char *src,unsigned char *dest,unsigned int length)
 {
 	int i=0;
 	/*如果是NOR启动*/
@@ -100,7 +101,7 @@ int copy_code_to_sdram(unsigned char *src,unsigned char *dest,unsigned int lengt
 	}
 	else 
 	{
-		nand_read(src,dest);
+		nand_read((unsigned int)src,dest,length);
 	}
 }
 void clean_bss(void)
@@ -118,15 +119,13 @@ void nand_init(void)
 	#define TWRPH1 	0
 
 	/* 设置时序 */
-	s3c2440nand->NFCONF = (TACLS<<12)|(TWRPH0<<8)|(TWRPH1<<4);
+	NFCONF = (TACLS<<12)|(TWRPH0<<8)|(TWRPH1<<4);
 	/* 使能NAND Flash控制器, 初始化ECC, 禁止片选 */
-	s3c2440nand->NFCONT = (1<<4)|(1<<1)|(1<<0);	
+	NFCONT = (1<<4)|(1<<1)|(1<<0);	
 }
 void nand_cmd(unsigned char cmd)
 {
-	volatile int i;
 	NFCMMD=cmd;
-	for(i=0;i<10;i++);
 }
 void nand_address(unsigned int addr)
 {
@@ -161,11 +160,12 @@ unsigned char nand_data(void)
 	return NFDATA;
 }
 	
-void nand_read(unsigned char addr,unsigned char *buf,unsigned int len)
+void nand_read(unsigned int addr,unsigned char *buf,unsigned int len)
 {
+int i=0;
 while (i<len)
 {
-	int col=src/2048;
+	int col=addr/2048;
 	/*1.select(CE)*/
 	nand_select();
 	/*2.send write command*/
@@ -186,4 +186,5 @@ while (i<len)
 	col=0;
 	/*cancel select(CE)*/
 	nand_deselect();
+}
 }

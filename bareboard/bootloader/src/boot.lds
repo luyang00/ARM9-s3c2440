@@ -1,16 +1,16 @@
 SECTIONS {
 	. = 0x33f80000;
-	.text : (*(.text))
+	.text : {*(.text)}
 	
 	.=ALIGN(4);
-	.rodata : (*(.rodata*))
+	.rodata : {*(.rodata*)}
 
 	.=ALIGN(4);
-	.data ALIGN(4):(*(.data))
+	.data :{*(.data)}
 
 	.=ALIGN(4);
 	__bss_start = .;
-	.bss ALIGN(4) : (*(.bss) *(COMMON))
-	_bss_end = .;
+	.bss  : {*(.bss) *(COMMON)}
+	__bss_end = .;
 	
 }
