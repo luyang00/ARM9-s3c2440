@@ -25,6 +25,5 @@ boot.bin: $(objs)
 	${CC} $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
 clean:
-	make  clean -C lib
 	rm -f boot.bin boot.elf *.dis
 	

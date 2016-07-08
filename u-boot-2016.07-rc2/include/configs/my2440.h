@@ -42,6 +42,8 @@
 #define CONFIG_CS8900_BASE	0x19000300
 #define CONFIG_CS8900_BUS16	/* the Linux driver does accesses as shorts */
 #else 
+#define CONFIG DM9000
+#define CONFIG_DM9000_NO_SROM
 #define CONFIG_DRIVER_DM9000
 #define CONFIG_DM9000_USE_16BIT
 #define CONFIG_DM9000_BASE	0x20000000
